@@ -11,7 +11,7 @@ public class Client implements Runnable {
 	public void run() {
 
 		// Объявляем начало выполнения запроса
-		System.out.println("Query #"+(++i));
+		System.out.println("Query #" + (++i));
 
 		InputStream inputStream = null;
 		BufferedReader bufferedReader = null;
@@ -39,9 +39,10 @@ public class Client implements Runnable {
 
 			//читаем первую строку запроса, игнорируем все заголовки которые идут дальше первой строки
 			StringBuilder sb = new StringBuilder();
+
 			int c;
-			while((c = inputStream.read())!=-1 && c!=10 && c!=13){
-				sb.append((char)c);
+			while ((c = inputStream.read()) != -1 && c != 10 && c != 13) {
+				sb.append((char) c);
 			}
 			//получаем команду и ее аргументы
 			String data = sb.toString();
@@ -59,15 +60,6 @@ public class Client implements Runnable {
 			//тело
 			outputStream.write(s.getBytes());
 			outputStream.flush();
-
-
-
-
-
-
-
-
-
 
 
 			//printWriter.println("HTTP/1.1 200 OK");
