@@ -48,35 +48,26 @@ public class Client implements Runnable {
 			String data = sb.toString();
 			String args[] = data.split(" ");
 			String cmd = args[0].trim().toUpperCase();
+
+
 			// пишем ответ Hello world
 			String s = "<html><title>test</title><body>Hello <b>world</b></body></html>";
-			//пишем статус ответа
-			outputStream.write("HTTP/1.0 200 OK\r\n".getBytes());
-			//минимально необходимые заголовки, тип и длина
-			outputStream.write("Content-Type: text/html\r\n".getBytes());
-			outputStream.write(("Content-Length: " + s.length() + "\r\n").getBytes());
-			//пустая строка отделяет заголовки от тела
-			outputStream.write("\r\n".getBytes());
-			//тело
-			outputStream.write(s.getBytes());
-			outputStream.flush();
 
+			printWriter.println("HTTP/1.0 200 OK");
+			printWriter.println("Content-Type: text/html");
+			printWriter.println("Content-Length: " + s.length());
+			printWriter.println();
+			printWriter.print(s);
+			printWriter.flush();
 
-			//printWriter.println("HTTP/1.1 200 OK");
-			//printWriter.println("Server: MyServer");
-			//printWriter.println("Content-Type: text/html; charset=utf-8");
-			//printWriter.println("Connection: close");
-			//printWriter.println("");
-			//
-			//String line = bufferedReader.readLine();
-			//while (line != null) {
-			//	printWriter.println(line);
-			//	line = bufferedReader.readLine();
-			//}
-			//
-			//clientSocket.shutdownInput();
-			//clientSocket.shutdownOutput();
-			//clientSocket.close();
+			Writer stringWriter = new StringWriter();
+
+			String line = bufferedReader.readLine();
+			while (line != null) {
+				stringWriter.println(line);
+				line = bufferedReader.readLine();
+			}
+
 
 		} catch (IOException e) {
 			e.printStackTrace(printWriter);
