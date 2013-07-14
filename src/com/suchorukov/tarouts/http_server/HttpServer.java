@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 public class HttpServer {
 
 	private Path rootDirectory;
-	private String appName;
 
 	public void start() throws IOException {
 
@@ -33,22 +32,17 @@ public class HttpServer {
 		}
 	}
 
-	public HttpServer(String appName, Path rootDirectory) {
-		this.appName = appName;
+	public HttpServer(Path rootDirectory) {
 		this.rootDirectory = rootDirectory;
 	}
 
 	public static void main(String[] args) throws IOException {
 		Path rootPath = Paths.get(args[1]);
-		HttpServer server = new HttpServer(args[0], rootPath);
+		HttpServer server = new HttpServer(rootPath);
 		server.start();
 	}
 
 	public Path getRootDirectory() {
 		return rootDirectory;
-	}
-
-	public String getAppName() {
-		return appName;
 	}
 }

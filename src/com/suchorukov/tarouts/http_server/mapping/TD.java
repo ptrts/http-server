@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TD {
 
 	@XmlElement
-	public A a;
+	private A a;
 
 	public TD(String href, String value) {
 		this.a = new A(href, value);

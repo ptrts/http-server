@@ -8,10 +8,10 @@ import javax.xml.bind.annotation.XmlValue;
 public class A {
 
 	@XmlAttribute(name = "href")
-	public String href;
+	private String href;
 
 	@XmlValue
-	public String value;
+	private String value;
 
 	public A(String href, String value) {
 		this.href = href;

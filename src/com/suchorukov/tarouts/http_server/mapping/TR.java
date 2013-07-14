@@ -7,13 +7,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TR {
 
 	@XmlElement(name = "td")
-	public TD name;
+	private TD name;
 
 	@XmlElement(name = "td")
-	public TD size;
+	private TD size;
 
 	@XmlElement(name = "td")
-	public TD lastModifiedTime;
+	private TD lastModifiedTime;
 
 	public TR(String href, String name, String size, String lastModifiedTime) {
 		this.name = new TD(href, name);

@@ -33,13 +33,13 @@ public class IndexWriter {
 
 	private static List<DirectoryEntry> getDirectoryEntries(Path path, Path rootPath) throws IOException {
 
+		// Заготавливаем список элементов директории
+		List<DirectoryEntry> entries = new ArrayList<>();
+
 		// Делаем поток чтения содержимого директории
 		DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
 
 		Path parentPath = path.getParent();
-
-		// Заготавливаем список элементов директории
-		List<DirectoryEntry> entries = new ArrayList<>();
 
 		DirectoryEntry entry = new DirectoryEntry(
 				"..",
@@ -94,11 +94,10 @@ public class IndexWriter {
 
 	public static void formIndex(Path directoryPath, Writer writer, Path rootPath) throws IOException, JAXBException {
 
-		// Это потоки для чтения шаблона
+		// Поток для чтения шаблона
 		InputStream inputStream = null;
-		BufferedReader bufferedReader = null;
 
-		// Это поток для записи содержимого index.html
+		// Поток для записи содержимого index.html
 		PrintWriter printWriter = null;
 
 		try {
@@ -115,7 +114,7 @@ public class IndexWriter {
 
 			inputStream = Client.class.getResourceAsStream("template.xhtml");
 			Reader reader = new InputStreamReader(inputStream);
-			bufferedReader = new BufferedReader(reader);
+			BufferedReader bufferedReader = new BufferedReader(reader);
 
 			///////////////////////////////////////////////////////////////
 			// ИНИЦИАЛИЗИРУЕМ МАРШАЛЛЕР
@@ -144,8 +143,7 @@ public class IndexWriter {
 
 						FileTime lastModifiedTime = directoryEntry.getLastModifiedTime();
 
-						//String href = directoryEntry.getPath().toString();
-						String href = directoryEntry.getName().toString();
+						String href = directoryEntry.getName();
 
 						href = href.replace(directoryEntry.getPath().getFileSystem().getSeparator(), "/");
 
@@ -184,8 +182,8 @@ public class IndexWriter {
 			if (printWriter != null) {
 				printWriter.close();
 			}
-			if (bufferedReader != null) {
-				bufferedReader.close();
+			if (inputStream != null) {
+				inputStream.close();
 			}
 		}
 	}
