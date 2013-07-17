@@ -92,7 +92,7 @@ public class IndexWriter {
 		return entries;
 	}
 
-	public static void formIndex(Path directoryPath, Writer writer, Path rootPath) throws IOException, JAXBException {
+	public static void formIndex(Path directoryPath, Writer writer, Path rootPath) throws JAXBException, IOException {
 
 		// Поток для чтения шаблона
 		InputStream inputStream = null;

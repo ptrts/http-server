@@ -3,6 +3,7 @@ package com.suchorukov.tarouts.http_server;
 import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +27,9 @@ public class Client implements Runnable {
 		printWriter.flush();
 	}
 
-	private void doGet(OutputStream outputStream, String resource) throws IOException, JAXBException {
+	private void doGet(OutputStream outputStream, String resourceParam) throws IOException, JAXBException {
+
+		String resource = URLDecoder.decode(resourceParam, "utf-8");
 
 		// Удаляем корень "/", если есть
 		Path resourcePath = Paths.get(resource);
@@ -44,7 +47,7 @@ public class Client implements Runnable {
 		File resourceFile = resourcePath.toFile();
 
 		if (!resourceFile.exists()) {
-			respond(outputStream, "404", "Not Found", "");
+			respond(outputStream, "404", "Not Found", "404: File not Found");
 		} else if (resourceFile.isDirectory()) {
 
 			// Будем формировать страницу содержимого каталога через StringWriter
@@ -59,8 +62,10 @@ public class Client implements Runnable {
 			// Content-Type
 			String contentType = Files.probeContentType(resourcePath);
 
-			// Content and Content-Length
+			// Content input stream
 			InputStream resourceInputStream = new FileInputStream(resourceFile);
+
+			// Content-Length
 			int contentLength = resourceInputStream.available();
 
 			// Готовим printWriter
@@ -74,11 +79,21 @@ public class Client implements Runnable {
 			printWriter.println();
 			printWriter.flush();
 
-			int i = resourceInputStream.read();
-			while (i != -1) {
+			while (true) {
+
+				// Считываем очередной символ
+				int i = resourceInputStream.read();
+
+				// Вываливаемся, если конец
+				if (i == -1) {
+					break;
+				}
+
+				// Сливаем клиенту
 				outputStream.write(i);
-				i = resourceInputStream.read();
 			}
+
+			// Пытаемся закрыть поток вывода данных клиенту
 			outputStream.flush();
 		}
 	}
@@ -116,7 +131,11 @@ public class Client implements Runnable {
 				respond(outputStream, "501", "Not Implemented", "");
 			}
 
-		} catch (Exception e) {
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace(System.out);
+		} catch (IOException e) {
+			e.printStackTrace(System.out);
+		} catch (JAXBException e) {
 			e.printStackTrace(System.out);
 		} finally {
 			try {
