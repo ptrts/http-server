@@ -37,7 +37,7 @@ public class HttpServer {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Path rootPath = Paths.get(args[1]);
+		Path rootPath = Paths.get(args[0]);
 		HttpServer server = new HttpServer(rootPath);
 		server.start();
 	}
