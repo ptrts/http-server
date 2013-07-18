@@ -79,28 +79,11 @@ public class Client implements Runnable {
 			printWriter.println();
 			printWriter.flush();
 
-			int contentLengthLeft = contentLength;
-
-			while (true) {
-
-				int portionLength = Math.min(1024, contentLengthLeft);
-
-				if (portionLength == 0) {
-					break;
-				}
-
-				byte[] portion = new byte[portionLength];
-
-				// Считываем очередной символ
-				resourceInputStream.read(portion);
-
-				// Сливаем клиенту
+			byte[] portion = new byte[1024];
+			while (resourceInputStream.read(portion) != -1) {
 				outputStream.write(portion);
-
-				contentLengthLeft -= portionLength;
 			}
 
-			// Пытаемся закрыть поток вывода данных клиенту
 			outputStream.flush();
 		}
 	}
